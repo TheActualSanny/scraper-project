@@ -16,13 +16,6 @@ display text
 import psycopg2
 from main_scraper import Laptop, laptop_list
 
-conn = psycopg2.connect(
-    database="your_database",
-    user="your_user",
-    password="your_password",
-    host="your_host",
-    port="your_port"
-)
 
 for laptop in laptop_list:
     with conn:
