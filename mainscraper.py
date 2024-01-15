@@ -14,6 +14,7 @@ class Laptop(BaseModel):
     graphics: str
     memory: str
     storage: str
+    display: str
     
     @field_validator('curr_price', mode = 'before')
     def price_valid(cls, value):
@@ -39,21 +40,26 @@ req = requests.get(url, params = params, headers = headers)
 soup = BeautifulSoup(req.content, 'html.parser')
 laptop_list = []
 
-while True:
-    soup = BeautifulSoup(req.content, 'html.parser')
-    req = get_NextPage(url, soup)
-    if not req:
-        break
-    laptops = soup.find_all('article', class_ = 'stack-system ps-stack')
-    for laptop in laptops:
-        data_html = laptop.find_all('span', class_ = 'ps-iconography-specs-label')
-        data = [i.text.lstrip().rstrip() for i in data_html]
-        name = laptop.find('h3', class_ = 'ps-title').text.split('\n')
-        price = laptop.find('div', class_ = 'ps-dell-price ps-simplified').text.split('$')
-        instance = Laptop(model = name[1], curr_price = price, processor = data[0], os = data[1], graphics = data[2], memory = data[3], storage = data[4])
-        laptop_list.append(instance)
+def main_Scraper(req):
+    while True:
+        soup = BeautifulSoup(req.content, 'html.parser')
+        req = get_NextPage(url, soup)
+        if not req:
+            break
+        laptops = soup.find_all('article', class_ = 'stack-system ps-stack')
+        for laptop in laptops:
+            data_html = laptop.find_all('span', class_ = 'ps-iconography-specs-label')
+            data = [i.text.lstrip().rstrip() for i in data_html]
+            name = laptop.find('h3', class_ = 'ps-title').text.split('\n')
+            price = laptop.find('div', class_ = 'ps-dell-price ps-simplified').text.split('$')
+            instance = Laptop(model = name[1], curr_price = price[-1], processor = data[0], 
+                            os = data[1], graphics = data[2], memory = data[3], 
+                            storage = data[4], display = data[5])
+            laptop_list.append(instance)
+    return laptop_list
 
+final = main_Scraper(req)
 
 if __name__ == '__main__':
-    for laptop in laptop_list:
-        print(laptop.curr_price, end = '\n')
+    for laptop in final:
+        print(f'{laptop.model} - {laptop.curr_price} - {laptop.os} - {laptop.display}')
