@@ -1,7 +1,7 @@
 import psycopg2
 import os
 from dotenv import load_dotenv
-from mainscraper import Laptop, laptop_list
+from main_scraper import Laptop, laptop_list
 
 conn = psycopg2.connect(host = os.getenv('HOST'), database = os.getenv('DB'), user = os.getenv('NAME'), password = os.getenv('PASS'))
 cursor = conn.cursor()
