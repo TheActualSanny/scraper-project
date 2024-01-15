@@ -17,14 +17,34 @@ storage text,
 display text
 )""")
 
-index = 1
+index = len(laptop_list)
+
+def add_Laptop(inst):
+    global index 
+    with conn:
+        cursor.execute('''INSERT INTO laptop_data(id, model, current_price, processor, os, graphics, memory, storage, display)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        ''', (index, inst.model, inst.curr_price, inst.processor, inst.os, inst.graphics, inst.memory, inst.storage, inst.display))
+    index += 1
+
+def del_Laptop(ind):
+    global index
+    with conn:
+        cursor.execute('DELETE FROM laptop_data WHERE id = %s', (ind,))
+    index -= 1
+
+def find_Laptop(price_min, price_end):
+    cursor.execute('SELECT * FROM laptop_data WHERE current_price > %s AND current_price < %s', (price_min, price_end))
+    return cursor.fetchall()
+    
+create_index = 1
 for laptop in laptop_list:
     with conn:
         cursor.execute('''
             INSERT INTO laptop_data(id, model, current_price, processor, os, graphics, memory, storage, display)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         ''', (
-            index
+            create_index
             laptop.model,
             laptop.curr_price,
             laptop.processor,
@@ -34,7 +54,7 @@ for laptop in laptop_list:
             laptop.storage
             laptop.display
         ))
-    index += 1
+    create_index += 1
     
 conn.commit()
 conn.close()
