@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 conn = psycopg2.connect(host = os.getenv('HOST'), database = os.getenv('DB'), user = os.getenv('NAME'), password = os.getenv('PASS'))
 cursor = conn.cursor()
 
-
+#CONFIGURING THE LOGGER
 logg = logging.getLogger('checker')
 logg.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(name)s - %(message)s')
@@ -28,7 +28,7 @@ def timer(func):
     '''CONFIGURE THE TIME IN add_Timer FUNCTION'''
     @functools.wraps(func)
     def add_Timer():
-        time.sleep(2) # < - - Configure here
+        time.sleep(7200) # < - - Change the wait time here
         return func()
     return add_Timer
 
