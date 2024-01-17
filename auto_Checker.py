@@ -27,13 +27,13 @@ logg.addHandler(stream)
 def timer(func):
     '''CONFIGURE THE TIME IN add_Timer FUNCTION'''
     @functools.wraps(func)
-    def add_Timer(*args):
+    def add_Timer():
         time.sleep(2) # < - - Configure here
-        return func(*args)
+        return func()
     return add_Timer
 
 @timer
-def main_Checker(numm = 1):
+def main_Checker():
     params = {'page' : 1}
     url = 'https://www.dell.com/en-us/shop/dell-laptops/sr/laptops/xps?appliedRefinements=37868,37873,37869,37867,37865'
     headers = {os.getenv('AGENT') : os.getenv('DATA')}
@@ -57,7 +57,7 @@ def main_Checker(numm = 1):
             logg.info('{}  laptops were added/modified.  Succesfully added them to the database!'.format(new_counter))
         else:
             logg.info('There were no new laptops added on the website..')
-    print(numm)
+
     
   
 while(True):
