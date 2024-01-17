@@ -20,22 +20,10 @@ display text
 index = 1
 for laptop in laptop_list:
     with conn:
-        cursor.execute('''
-            INSERT INTO laptop_data(id, model, current_price, processor, os, graphics, memory, storage, display)
+        cursor.execute('''INSERT INTO laptop_data(id, model, current_price, processor, os, graphics, memory, storage, display)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-        ''', (
-            index
-            laptop.model,
-            laptop.curr_price,
-            laptop.processor,
-            laptop.os,
-            laptop.graphics,
-            laptop.memory,
-            laptop.storage
-            laptop.display
-        ))
+        ''', (index, laptop.model, laptop.curr_price, laptop.processor, laptop.os, laptop.graphics, laptop.memory, laptop.storage, laptop.display))
     index += 1
-
 
 def add_Laptop(inst):
     global index 
