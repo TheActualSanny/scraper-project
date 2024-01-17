@@ -37,7 +37,6 @@ params = {'page' : 1}
 url = 'https://www.dell.com/en-us/shop/dell-laptops/sr/laptops/xps?appliedRefinements=37868,37873,37869,37867,37865'
 headers = {os.getenv('AGENT') : os.getenv('DATA')}
 req = requests.get(url, params = params, headers = headers)
-soup = BeautifulSoup(req.content, 'html.parser')
 laptop_list = []
 
 def main_Scraper(req):
