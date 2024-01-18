@@ -24,20 +24,23 @@ for laptop in laptop_list:
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         ''', (index, laptop.model, laptop.curr_price, laptop.processor, laptop.os, laptop.graphics, laptop.memory, laptop.storage, laptop.display))
     index += 1
+    
+cursor.execute('SELECT * FROM laptop_data')
+next_key = len(cursor.fetchall()) + 1
 
-def add_Laptop(inst):
-    global index 
+def add_Laptop(conn, cursor, inst):
+    global next_key 
     with conn:
         cursor.execute('''INSERT INTO laptop_data(id, model, current_price, processor, os, graphics, memory, storage, display)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-        ''', (index, inst.model, inst.curr_price, inst.processor, inst.os, inst.graphics, inst.memory, inst.storage, inst.display))
-    index += 1
+        ''', (next_key, inst.model, inst.curr_price, inst.processor, inst.os, inst.graphics, inst.memory, inst.storage, inst.display))
+    next_key += 1
 
 def del_Laptop(ind):
-    global index
+    global next_key
     with conn:
         cursor.execute('DELETE FROM laptop_data WHERE id = %s', (ind,))
-    index -= 1
+    next_key -= 1
 
 def find_Laptop(price_min, price_end):
     cursor.execute('SELECT * FROM laptop_data WHERE current_price > %s AND current_price < %s', (price_min, price_end))
