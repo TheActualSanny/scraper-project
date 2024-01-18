@@ -52,7 +52,7 @@ def main_Checker():
                 data.append(i[-1])
             if tuple(data) not in laptops:
                 new_counter += 1
-                add_Laptop(laptop)
+                #add_Laptop(laptop)
         if new_counter > 0:
             logg.info('{}  laptops were added/modified.  Succesfully added them to the database!'.format(new_counter))
         else:
