@@ -5,7 +5,7 @@ import time
 import logging
 import functools
 from main_scraper import main_Scraper
-from database_manager import add_Laptop
+from database_manager import add_Laptop, next_key
 from bs4 import BeautifulSoup
 
 
@@ -42,21 +42,18 @@ def main_Checker():
     cursor.execute('SELECT model, current_price, processor, os, graphics, memory, storage, display FROM laptop_data')
     new_counter = 0
     laptops = cursor.fetchall()
-    
-    if len(new_laptop_list) < len(laptops):
-        logg.info('{} laptops were deleted...'.format(len(laptops) - len(new_laptop_list)))
+
+    for laptop in new_laptop_list:
+        data = []
+        for i in laptop:
+            data.append(i[-1])
+        if tuple(data) not in laptops:
+            new_counter += 1
+            add_Laptop(conn, cursor, laptop)
+    if new_counter > 0:
+        logg.info('{}  laptops were added/modified.  Succesfully added them to the database!'.format(new_counter))
     else:
-        for laptop in new_laptop_list:
-            data = []
-            for i in laptop:
-                data.append(i[-1])
-            if tuple(data) not in laptops:
-                new_counter += 1
-                #add_Laptop(laptop)
-        if new_counter > 0:
-            logg.info('{}  laptops were added/modified.  Succesfully added them to the database!'.format(new_counter))
-        else:
-            logg.info('There were no new laptops added on the website..')
+        logg.info('There were no new laptops added on the website..')
 
     
   
